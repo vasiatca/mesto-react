@@ -30,11 +30,15 @@ const App = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userInfo = await Api.getUser();
-      setUserInfo(userInfo);
+      try {
+        const userInfo = await Api.getUser();
+        setUserInfo(userInfo);
 
-      const cards = await Api.getInitialCards();
-      setCards(cards);
+        const cards = await Api.getInitialCards();
+        setCards(cards);
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     fetchData();
@@ -111,19 +115,6 @@ const App = () => {
           )
         }
       />
-
-      {/* <PopupWithForm
-        name="delete-card"
-        title="Вы уверены?"
-        isOpen={isEditAvatarPopupOpen}
-        children={
-          (
-            <>
-              <button type="submit" className="popup__submit-button">Да</button>
-            </>
-          )
-        }
-      /> */}
 
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
