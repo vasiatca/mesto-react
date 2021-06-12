@@ -8,6 +8,7 @@
   top: 18px;
   right: 15px;
   cursor: pointer;
+  display: none;
 }
 
 .element__delete:focus {
@@ -16,4 +17,9 @@
 
 .element__delete:hover {
   opacity: 0.6;
+}
+
+/* TODO: перенести в отдельный файл по БЭМ */
+.element__delete_visible {
+  display: block;
 }
