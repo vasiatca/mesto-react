@@ -8,6 +8,7 @@
   top: 18px;
   right: 15px;
   cursor: pointer;
+  display: none;
 }
 
 .element__delete:focus {
@@ -17,3 +18,4 @@
 .element__delete:hover {
   opacity: 0.6;
 }
+

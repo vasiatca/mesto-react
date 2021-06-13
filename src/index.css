@@ -48,6 +48,8 @@ code {
 @import url(./blocks/element/__like-number/element__like-number.css);
 @import url(./blocks/element/__card/element__card.css);
 @import url(./blocks/element/__delete/element__delete.css);
+@import url(./blocks/element/__delete/_visible/element__delete_visible.css);
+
 
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__copyright/footer__copyright.css);
