@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import Api from "./../utils/Api";
+import api from "../utils/api";
 
 import Footer from "./Footer";
 import Header from "./Header";
@@ -36,33 +36,33 @@ const App = () => {
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((own) => own._id === currentUser._id);
 
-    Api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
       setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
     });
   };
 
   const handleCardDelete = (card) => {
-    Api.deleteCard(card._id).then(() => {
+    api.deleteCard(card._id).then(() => {
       setCards((state) => state.filter((c) => c._id !== card._id));
     });
   };
 
   const handleUpdateUser = ({ name, about }) => {
-    Api.editUser({ name, about }).then((newUser) => {
+    api.editUser({ name, about }).then((newUser) => {
       setCurrentUser(newUser);
       closeAllPopups();
     });
   };
 
   const handleUpdateAvatar = ({ avatar }) => {
-    Api.updateAvatar(avatar).then((newUser) => {
+    api.updateAvatar(avatar).then((newUser) => {
       setCurrentUser(newUser);
       closeAllPopups();
     });
   };
 
   const handleAddPlaceCard = ({ name, link }) => {
-    Api.addNewCard({ name, link }).then((newCard) => {
+    api.addNewCard({ name, link }).then((newCard) => {
       setCards([newCard, ...cards]);
       closeAllPopups();
     });
@@ -71,10 +71,10 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userInfo = await Api.getUser();
+        const userInfo = await api.getUser();
         setCurrentUser(userInfo);
 
-        const cards = await Api.getInitialCards();
+        const cards = await api.getInitialCards();
         setCards(cards);
       } catch (err) {
         console.log(err);
