@@ -28,8 +28,6 @@ const EditProfilePopup = (props) => {
 			name,
 			about: description,
 		});
-		setName("");
-		setDescription("");
 	};
 
 	return (
