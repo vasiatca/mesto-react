@@ -8,8 +8,8 @@ import Main from "./Main";
 
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
-import EditProfileAvatar from "./EditProfileAvatar";
-import AddCardPopup from "./AddCardPopup";
+import EditAvatarPopup from "./EditAvatarPopup";
+import AddPlacePopup from "./AddPlacePopup";
 
 import CurrentUserContext from "./../contexts/CurrentUserContext";
 
@@ -108,13 +108,13 @@ const App = () => {
           onClose={closeAllPopups}
         />
 
-        <EditProfileAvatar
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onUpdateAvatar={handleUpdateAvatar}
           onClose={closeAllPopups}
         />
 
-        <AddCardPopup
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onAddCard={handleAddPlaceCard}
           onClose={closeAllPopups}

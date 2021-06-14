@@ -1,7 +1,7 @@
 import { createRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
-const EditProfileAvatar = (props) => {
+const EditAvatarPopup = (props) => {
 	const avatarRef = createRef();
 
 	const handleSubmit = (e) => {
@@ -42,4 +42,4 @@ const EditProfileAvatar = (props) => {
 	);
 };
 
-export default EditProfileAvatar;
+export default EditAvatarPopup;

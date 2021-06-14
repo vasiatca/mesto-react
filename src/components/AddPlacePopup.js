@@ -1,7 +1,7 @@
 import { createRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
-const AddCardPopup = (props) => {
+const AddPlacePopup = (props) => {
 	const nameRef = createRef();
 	const linkRef = createRef();
 
@@ -58,4 +58,4 @@ const AddCardPopup = (props) => {
 	);
 };
 
-export default AddCardPopup;
+export default AddPlacePopup;
