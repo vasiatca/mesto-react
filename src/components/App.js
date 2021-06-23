@@ -1,81 +1,36 @@
 import { useState, useEffect } from "react";
+import { Switch, Route, useHistory } from "react-router-dom";
 
-import Api from "./../utils/Api";
+import AuthApi from "./../utils/AuthApi";
 
 import Footer from "./Footer";
 import Header from "./Header";
-import Main from "./Main";
 
-import ImagePopup from "./ImagePopup";
-import EditProfilePopup from "./EditProfilePopup";
-import EditProfileAvatar from "./EditProfileAvatar";
-import AddCardPopup from "./AddCardPopup";
+import Login from "./Login";
+import Register from "./Register";
+import Home from "./Home";
 
-import CurrentUserContext from "./../context/CurrentUserContext";
+import ProtectedRoute from "./ProtectedRoute";
+// import InfoTooltip from "./InfoTooltip";
+
+import AuthUserContext from "./../context/AuthUserContext";
 
 const App = () => {
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
-  const [cards, setCards] = useState([]);
+  const history = useHistory();
+  const [authUser, setAuthUser] = useState({});
 
-  const [currentUser, setCurrentUser] = useState({});
-
-  const closeAllPopups = () => {
-    setIsEditProfilePopupOpen(false);
-    setIsEditAvatarPopupOpen(false);
-    setIsAddPlacePopupOpen(false);
-    setSelectedCard({});
-  };
-
-  const handleCardClick = (card) => {
-    setSelectedCard(card);
-  };
-
-  const handleCardLike = (card) => {
-    const isLiked = card.likes.some((own) => own._id === currentUser._id);
-
-    Api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    });
-  };
-
-  const handleCardDelete = (card) => {
-    Api.deleteCard(card._id).then((newCards) => {
-      setCards((state) => state.filter((c) => c._id !== card._id));
-    });
-  };
-
-  const handleUpdateUser = ({ name, about }) => {
-    Api.editUser({ name, about }).then((newUser) => {
-      setCurrentUser(newUser);
-      closeAllPopups();
-    });
-  };
-
-  const handleUpdateAvatar = ({ avatar }) => {
-    Api.updateAvatar(avatar).then((newUser) => {
-      setCurrentUser(newUser);
-      closeAllPopups();
-    });
-  };
-
-  const handleAddPlaceCard = ({ name, link }) => {
-    Api.addNewCard({ name, link }).then((newCard) => {
-      setCards([newCard, ...cards]);
-      closeAllPopups();
-    });
+  const logout = () => {
+    localStorage.removeItem("token");
+    setAuthUser({});
+    history.push("/sign-in");
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userInfo = await Api.getUser();
-        setCurrentUser(userInfo);
+        const response = await AuthApi.getUser();
 
-        const cards = await Api.getInitialCards();
-        setCards(cards);
+        setAuthUser(response ? response.data : {});
       } catch (err) {
         console.log(err);
       }
@@ -85,44 +40,25 @@ const App = () => {
   }, []);
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <AuthUserContext.Provider value={authUser}>
       <div className="App">
         <div className="page">
-          <Header />
-
-          <Main
-            cards={cards}
-            onEditProfile={() => setIsEditProfilePopupOpen(true)}
-            onEditAvatar={() => setIsEditAvatarPopupOpen(true)}
-            onAddPlace={() => setIsAddPlacePopupOpen(true)}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-          />
+          <Header logout={logout} />
+          <Switch>
+            <Route path="/sign-in">
+              <Login setUser={setAuthUser} />
+            </Route>
+            <Route path="/sign-up">
+              <Register />
+            </Route>
+            <ProtectedRoute path="/">
+              <Home />
+            </ProtectedRoute>
+          </Switch>
           <Footer />
         </div>
-
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onUpdateUser={handleUpdateUser}
-          onClose={closeAllPopups}
-        />
-
-        <EditProfileAvatar
-          isOpen={isEditAvatarPopupOpen}
-          onUpdateAvatar={handleUpdateAvatar}
-          onClose={closeAllPopups}
-        />
-
-        <AddCardPopup
-          isOpen={isAddPlacePopupOpen}
-          onAddCard={handleAddPlaceCard}
-          onClose={closeAllPopups}
-        />
-
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
-    </CurrentUserContext.Provider>
+    </AuthUserContext.Provider>
   );
 };
 
